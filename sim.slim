@@ -1,150 +1,149 @@
 
-    initialize()
-    {
-      
-      let_s = asFloat(0.5); //0 or 0.5
-	  let_prop = asFloat(0.01); //0, 0.01, 0.05, or 0.10
-      defineConstant("path","/u/home/e/eewade/com_ana/cor_prop_reps/rep_output"); //insert path
-      
-      // set the mutation rate
-      initializeMutationRate(1.5e-8);
-      
-      //total sequence length
-      defineConstant("seqLength", 100000000);
-      
-      initializeMutationType("m1", 0.5, "f", 0.0);
+initialize()
+{
 	
-	    //m1 mutation type: deleterious
-	    initializeMutationType("m2", 0.5,"g", -0.01314833,0.186);
-      
-      initializeMutationType("m3", let_s, "f", -1.0);
-      
-      //set ratio of NS:SYN as 2.31:1 but with 3.1% of NS muts as neutral
-      initializeGenomicElementType("g1", c(m1, m2, m3), c(30.2, 69.8 *(1 - let_prop), 69.8 * let_prop ));
-      initializeGenomicElementType("g2", m1, 1);
-      initializeGenomicElementType("g3", m1, 1);
-      
-      //initializeGenomicElementType("g2", c(m2), c	
-                                     // Generate random genes along the chromosome
-                                     base = 0;
-                                     nc_length_total = 0;
-                                     in_length_total = 0;
-                                     ex_length_total = 0;
-                                     while (base < seqLength) {
-                                       // make a non-coding region
-                                       nc_length = asInteger(runif(1, 500, 50000)); nc_length_total = nc_length_total + nc_length;
-                                       //initializeGenomicElement(g2, base, base + nc_length - 1);
-                                       base = base + nc_length;
-                                       // make first exon
-                                       ex_length = asInteger(rlnorm(1, log(50), log(2))) + 1; ex_length_total = ex_length_total + ex_length;
-                                       initializeGenomicElement(g1, base, base + ex_length - 1);
-                                       base = base + ex_length;
-                                       // make additional intron-exon pairs
-                                       do {
-                                         in_length = asInteger(rlnorm(1, log(100), log(1.5))) + 10; in_length_total = in_length_total + in_length;
-                                         //initializeGenomicElement(g3, base, base + in_length - 1);
-                                         base = base + in_length;
-                                         ex_length = asInteger(rlnorm(1, log(50), log(2))) + 1; ex_length_total = ex_length_total + ex_length;
-                                         initializeGenomicElement(g1, base, base + ex_length - 1);
-                                         base = base + ex_length;
-                                       } while (runif(1) < 0.8); // 20% probability of stopping
-                                     }
-                                     // final non-coding region
-                                     nc_length = asInteger(runif(1, 100, 5000));
-                                     //initializeGenomicElement(g2, base, base + nc_length - 1);
-                                     
-                                     // uniform recombination along the chromosome
-                                     initializeRecombinationRate(1e-8);
-                                     
-                                     // sample size for SFS (in haploids)
-                                     //defineConstant("sample_size", 100);
-                                     
-    }
-    
-    // create a population of 1000 individuals
-    1
-    {
-      sim.addSubpop("p1", 10000);
-    }
-    
-    
-    //change the population size - could increase or decrease
-    100000 {
-      p1.setSubpopulationSize(10000); 
-    }
-    
-    
-    // run to generation 10100
-    101000
-    {
-      sim.simulationFinished();
-    }
-    
-    
-    //output SFS, for each generation
-    1:101000 late(){
-      
-      if (sim.generation % 5000 == 0) { print(sim.generation); }
-      
-    }
-    
-    //for 10001 - 10100
-    101000 late() {
-      
-      ss = c(10, 100, 1000);
-      
-      for (sample_size in ss) {
-        
-        sampledHaploidGenomes= sample(p1.genomes, sample_size); //get 10 genomes
-        m1MutationsInSample=unique(sampledHaploidGenomes.mutationsOfType(m1)); //get unique m1 mutations in sample, returns vector of m1 mutations 
-        m1counts=sampledHaploidGenomes.mutationCountsInGenomes(mutations=m1MutationsInSample); //m1counts = integer vector w/ frequency counts of mutations, count for each 																																			position																																																												
-        m2MutationsInSample=unique(sampledHaploidGenomes.mutationsOfType(m2)); //get unique m1 mutations in sample, returns vector of m1 mutations 
-        m2counts=sampledHaploidGenomes.mutationCountsInGenomes(mutations=m2MutationsInSample); //m1counts = integer vector w/ frequency counts of mutations, count for each 																																		position																										
-        m3MutationsInSample=unique(sampledHaploidGenomes.mutationsOfType(m3)); //get unique m1 mutations in sample, returns vector of m1 mutations 
-        m3counts=sampledHaploidGenomes.mutationCountsInGenomes(mutations=m3MutationsInSample); //m1counts = integer vector w/ frequency counts of mutations, count for each position		
-        m1_sfs = c();
-        m2_sfs = c();
-        m3_sfs = c();
-        
-        for (i in seq(1,sample_size)){ //for 1 to 10
-          
-          count = sum(m1counts==i); //i = frequency, ex sum counts that equal 1, 2, 3, 4....10
-          m1_sfs = c(m1_sfs, count);
-          
-          count = sum(m2counts==i);
-          m2_sfs = c(m2_sfs, count);
-          
-          count = sum(m3counts==i);
-          m3_sfs = c(m3_sfs, count);
-          
-        }
-        
-        
-        //sfs for synonymous
-        neu_sfs = m1_sfs;
-        neu_to_print = paste(asString(neu_sfs), sep = "	");
-        towrite = paste("syn_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
-        fullpath = paste(path, towrite, sep = "/");
-        writeFile(fullpath, neu_to_print, append = T);
-        //print("printed");
-        
-        //sfs for nonsynonymous
-        del_sfs = m2_sfs + m3_sfs;
-        del_to_print = paste(asString(del_sfs), sep = "	");
-        towrite = paste("nonsyn_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
-        fullpath = paste(path, towrite, sep = "/");
-        writeFile(fullpath, del_to_print, append = T);
-        
-        m3_to_print = paste(asString(m3_sfs), sep = "	");
-		    towrite = paste("lethal_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
-		    fullpath = paste(path, towrite, sep = "/");
-		    writeFile(fullpath, m3_to_print, append = T);
-        
-      }
-      
-      
-    }
-    
+	let_s = asFloat(0.5); //0 or 0.5
+	let_prop = asFloat(0.01); //0, 0.01, 0.05, or 0.10
+	defineConstant("path","/u/home/e/eewade/com_ana/cor_prop_reps/rep_output"); //insert path
+	
+	// set the mutation rate
+	initializeMutationRate(1.5e-8);
+	
+	//total sequence length
+	defineConstant("seqLength", 100000000);
+	
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	
+	//m1 mutation type: deleterious
+	initializeMutationType("m2", 0.5,"g", -0.01314833,0.186);
+	
+	initializeMutationType("m3", let_s, "f", -1.0);
+	
+	//set ratio of NS:SYN as 2.31:1 but with 3.1% of NS muts as neutral
+	initializeGenomicElementType("g1", c(m1, m2, m3), c(30.2, 69.8 *(1 - let_prop), 69.8 * let_prop ));
+	initializeGenomicElementType("g2", m1, 1);
+	initializeGenomicElementType("g3", m1, 1);
+	
+	//initializeGenomicElementType("g2", c(m2), c	
+	// Generate random genes along the chromosome
+	base = 0;
+	nc_length_total = 0;
+	in_length_total = 0;
+	ex_length_total = 0;
+	while (base < seqLength) {
+		// make a non-coding region
+		nc_length = asInteger(runif(1, 500, 50000)); nc_length_total = nc_length_total + nc_length;
+		//initializeGenomicElement(g2, base, base + nc_length - 1);
+		base = base + nc_length;
+		// make first exon
+		ex_length = asInteger(rlnorm(1, log(50), log(2))) + 1; ex_length_total = ex_length_total + ex_length;
+		initializeGenomicElement(g1, base, base + ex_length - 1);
+		base = base + ex_length;
+		// make additional intron-exon pairs
+		do {
+			in_length = asInteger(rlnorm(1, log(100), log(1.5))) + 10; in_length_total = in_length_total + in_length;
+			//initializeGenomicElement(g3, base, base + in_length - 1);
+			base = base + in_length;
+			ex_length = asInteger(rlnorm(1, log(50), log(2))) + 1; ex_length_total = ex_length_total + ex_length;
+			initializeGenomicElement(g1, base, base + ex_length - 1);
+			base = base + ex_length;
+		} while (runif(1) < 0.8); // 20% probability of stopping
+	}
+	// final non-coding region
+	nc_length = asInteger(runif(1, 100, 5000));
+	//initializeGenomicElement(g2, base, base + nc_length - 1);
+	
+	// uniform recombination along the chromosome
+	initializeRecombinationRate(1e-8);
+	
+	// sample size for SFS (in haploids)
+	//defineConstant("sample_size", 100);
 
-        
+}
+
+// create a population of 1000 individuals
+1
+{
+	sim.addSubpop("p1", 10000);
+}
+
+
+//change the population size - could increase or decrease
+100000 {
+	p1.setSubpopulationSize(10000);
+}
+
+
+// run to generation 10100
+101000
+{
+	sim.simulationFinished();
+}
+
+
+//output SFS, for each generation
+1:101000 late(){
 	
+	if (sim.generation % 5000 == 0) { print(sim.generation); }
+
+}
+
+//for 10001 - 10100
+101000 late() {
+	
+	ss = c(10, 100, 1000);
+	
+	for (sample_size in ss) {
+		
+		sampledHaploidGenomes= sample(p1.genomes, sample_size); //get 10 genomes
+		m1MutationsInSample=unique(sampledHaploidGenomes.mutationsOfType(m1)); //get unique m1 mutations in sample, returns vector of m1 mutations 
+		m1counts=sampledHaploidGenomes.mutationCountsInGenomes(mutations=m1MutationsInSample); //m1counts = integer vector w/ frequency counts of mutations, count for each 																																			position																																																												
+		m2MutationsInSample=unique(sampledHaploidGenomes.mutationsOfType(m2)); //get unique m1 mutations in sample, returns vector of m1 mutations 
+		m2counts=sampledHaploidGenomes.mutationCountsInGenomes(mutations=m2MutationsInSample); //m1counts = integer vector w/ frequency counts of mutations, count for each 																																		position																										
+		m3MutationsInSample=unique(sampledHaploidGenomes.mutationsOfType(m3)); //get unique m1 mutations in sample, returns vector of m1 mutations 
+		m3counts=sampledHaploidGenomes.mutationCountsInGenomes(mutations=m3MutationsInSample); //m1counts = integer vector w/ frequency counts of mutations, count for each position		
+		m1_sfs = c();
+		m2_sfs = c();
+		m3_sfs = c();
+		
+		for (i in seq(1,sample_size)){ //for 1 to 10
+			
+			count = sum(m1counts==i); //i = frequency, ex sum counts that equal 1, 2, 3, 4....10
+			m1_sfs = c(m1_sfs, count);
+			
+			count = sum(m2counts==i);
+			m2_sfs = c(m2_sfs, count);
+			
+			count = sum(m3counts==i);
+			m3_sfs = c(m3_sfs, count);
+		
+		}
+		
+		
+		//sfs for synonymous
+		neu_sfs = m1_sfs;
+		neu_to_print = paste(asString(neu_sfs), sep = "	");
+		towrite = paste("syn_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
+		fullpath = paste(path, towrite, sep = "/");
+		writeFile(fullpath, neu_to_print, append = T);
+		//print("printed");
+		
+		//sfs for nonsynonymous
+		del_sfs = m2_sfs + m3_sfs;
+		del_to_print = paste(asString(del_sfs), sep = "	");
+		towrite = paste("nonsyn_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
+		fullpath = paste(path, towrite, sep = "/");
+		writeFile(fullpath, del_to_print, append = T);
+		
+		m3_to_print = paste(asString(m3_sfs), sep = "	");
+		towrite = paste("lethal_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
+		fullpath = paste(path, towrite, sep = "/");
+		writeFile(fullpath, m3_to_print, append = T);
+	
+	}
+
+
+}
+
+
+
