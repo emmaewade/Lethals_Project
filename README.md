@@ -3,7 +3,7 @@ Introduction to Lethals Project
 
 This document was created as a repository of the scripts used in the analyses of the article: XXXXXX (doi: XXXXX).
 Files used in the pipeline are described as follow
-- *sim.slim* Forward in time simulations were conducted using the software [SLiM 3](https://pubmed.ncbi.nlm.nih.gov/30517680/)<sup>1</sup>.
+- *sim.slim* Forward in time simulations were conducted using the software [SLiM 3](https://github.com/MesserLab/SLiM)<sup>1</sup>.
 - *demographic_inference.py* This python script contains the code used for the inference demographic parameters using the software [dadi](https://dadi.readthedocs.io/en/latest/#welcome-to-dadi)<sup>2</sup>.
 - *selection_inference.py* This python script contains the code used for the inference of the distribution of fitness effects (DFE) using the software [fitdadi](https://github.com/LohmuellerLab/fitdadi)<sup>3</sup>.
 
