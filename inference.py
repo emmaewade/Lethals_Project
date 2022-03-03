@@ -27,7 +27,7 @@ replicate = int(argv[4])
 sfs_size = int(argv[5])
 let_prop = argv[6]
 
-###############Demography stuff####################################
+############### Demography inference with dadi ####################################
 
 #the demographic function we will be using for our analysis. This describes
 #a two epoch model with one historical size change.
@@ -52,9 +52,10 @@ def two_epoch_sel(params, ns, pts):
     fs = dadi.Spectrum.from_phi(phi, ns, (xx,))
     return fs
 
-#pneu = neutal paramter
-#alpha + beta = gamma parameter
-#let = lethal parameter
+# Variables description:
+# pneu = neutal paramter
+# alpha + beta = gamma parameters
+# let = lethal parameter
 
 # < 1e-4 = pneu
 # 1e-4 < gamma < (1e-2????)
@@ -101,9 +102,7 @@ lower_bound = [1e-2, 0.0001]#, 1e-2, 1e-3, 1, 1e-3]
 upper_bound = [10,50.]#, 10, 0.5, 200, 0.5] ###########bounds for T1???##################
 fixed_params = [None, None]#, None, None, None, None] #made none
 
-# fit demographic model
-# need to make sure parameters are a good fit
-# i usually run 25-30 runs and make sure they've converged
+# Fitting the demographic model
 
 # randomize starting point
 p0 = dadi.Misc.perturb_params(params, upper_bound=upper_bound)
@@ -131,7 +130,7 @@ print("This is theta synonymous")
 print(theta_s)
 
 
-#####################Selection stuff##########################################
+##################### Selection inference with fitdadi ##########################################
 
 #compute Nanc for DFE rescaling
 mu = 1.5e-8 #if mutation rate, correct
