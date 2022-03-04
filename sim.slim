@@ -24,7 +24,7 @@ initialize()
 	initializeGenomicElementType("g2", m1, 1);
 	initializeGenomicElementType("g3", m1, 1);
 	
-	//initializeGenomicElementType("g2", c(m2), c	
+	
 	// Generate random genes along the chromosome
 	base = 0;
 	nc_length_total = 0;
@@ -33,12 +33,17 @@ initialize()
 	while (base < seqLength) {
 		// make a non-coding region
 		nc_length = asInteger(runif(1, 500, 50000)); nc_length_total = nc_length_total + nc_length;
+		
+		//ignore noncoding elements for computational efficiency <--- reword probably
 		//initializeGenomicElement(g2, base, base + nc_length - 1);
+		
 		base = base + nc_length;
+		
 		// make first exon
 		ex_length = asInteger(rlnorm(1, log(50), log(2))) + 1; ex_length_total = ex_length_total + ex_length;
 		initializeGenomicElement(g1, base, base + ex_length - 1);
 		base = base + ex_length;
+		
 		// make additional intron-exon pairs
 		do {
 			in_length = asInteger(rlnorm(1, log(100), log(1.5))) + 10; in_length_total = in_length_total + in_length;
@@ -47,8 +52,10 @@ initialize()
 			ex_length = asInteger(rlnorm(1, log(50), log(2))) + 1; ex_length_total = ex_length_total + ex_length;
 			initializeGenomicElement(g1, base, base + ex_length - 1);
 			base = base + ex_length;
-		} while (runif(1) < 0.8); // 20% probability of stopping
+		} while (runif(1) < 0.8); 
+		
 	}
+	
 	// final non-coding region
 	nc_length = asInteger(runif(1, 100, 5000));
 	//initializeGenomicElement(g2, base, base + nc_length - 1);
@@ -56,12 +63,10 @@ initialize()
 	// uniform recombination along the chromosome
 	initializeRecombinationRate(1e-8);
 	
-	// sample size for SFS (in haploids)
-	//defineConstant("sample_size", 100);
 
 }
 
-// create a population of 1000 individuals
+// create a population of 10000 individuals
 1
 {
 	sim.addSubpop("p1", 10000);
@@ -135,6 +140,7 @@ initialize()
 		fullpath = paste(path, towrite, sep = "/");
 		writeFile(fullpath, del_to_print, append = T);
 		
+		//sfs for lethal
 		m3_to_print = paste(asString(m3_sfs), sep = "	");
 		towrite = paste("lethal_sfs_0.01_0.5_7_", sample_size, ".tsv", sep = "");
 		fullpath = paste(path, towrite, sep = "/");
