@@ -167,6 +167,7 @@ for (l in levels){
   } 
 }
 
+library(ggplot)
 #to_plot$h can be 0 or 0.5
 #to_plot$ss can be 10, 100, 1000
 gg = ggplot(to_plot[which(to_plot$h == "0.5" & to_plot$ss == "1000"), ], aes(fill = factor (Type), x = factor(s, c("Neutral", "Nearly Neutral", 
