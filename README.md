@@ -17,6 +17,10 @@ Files used in the pipeline are described as follow
 - *cont_dfe* ...*to add*
 - *compare_lethal_sfs.R* ...*to add*
 
+- *all_inferences.csv* ...*to add*
+- *all_log_inferences.csv* ...* to add*
+- *sfs files* ... *to ad*
+
 
 **References**
 - <sup>1</sup> Haller, Benjamin C., and Philipp W. Messer. 2019. “SLiM 3: Forward Genetic Simulations Beyond the Wright–Fisher Model.” *Molecular Biology and Evolution* 36 (3): 632–37.
