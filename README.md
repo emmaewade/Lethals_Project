@@ -18,8 +18,8 @@ Files used in the pipeline are described as follow
 - *compare_lethal_sfs.R* ...*to add*
 
 - *all_inferences.csv* ...*to add*
-- *all_log_inferences.csv* ...* to add*
-- *sfs files* ... *to ad*
+- *all_log_inferences.csv* ...*to add*
+- *sfs files* ... *to add*
 
 
 **References**
