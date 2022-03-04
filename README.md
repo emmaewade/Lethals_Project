@@ -13,6 +13,9 @@ Files used in the pipeline are described as follow
 - *dot_plot.R* ...
 - *log_profile.R* ...
 - *compare_ss.R* ...
+- *compare_sfs.R* ...*to add*
+- *cont_dfe* ...*to add*
+- *compare_lethal_sfs.R* ...*to add*
 
 
 **References**
