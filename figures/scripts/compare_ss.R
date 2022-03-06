@@ -38,10 +38,7 @@ plot_discrete <- function(alpha, beta, Nanc, prop = 0){
 }
 
 #prepare data
-com = read.table("c:/big_summer/1_31/all_inference.csv", h=T, sep=',', stringsAsFactors = F)
-com_2 = read.table("c:/big_summer/1_31/second/all_inference.csv", h=T, sep=',', stringsAsFactors = F)
-com_2$rep = com_2$rep + 10
-com = rbind(com, com_2)
+com = read.table("all_inferences.csv", h=T, sep=',', stringsAsFactors = F)
 com$alpha = as.numeric(com$alpha)
 com$beta = as.numeric(com$beta)
 com$Nanc = as.numeric(com$Nanc)
