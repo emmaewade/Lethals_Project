@@ -52,11 +52,8 @@ plot_discrete_DFE <- function(alpha, beta, Nanc, type = "Inferred", prop = 0.0){
 }
 
 
-### below is combining the 20 replicates, I assume I could probably condense this part
-com = read.table("C:/big_summer/1_31/all_inference.csv", h=T, sep = ",") ### change path???
-com_2 = read.table("C:/big_summer/1_31/second/all_inference.csv", h = T, sep = ",") ### change path??? 
-com_2$rep = com_2$rep + 10
-com = rbind(com, com_2)
+# prepare data
+com = read.table("all_inferences.csv", h=T, sep = ",") 
 
 #just need gamma distribution inferences
 com$alpha = as.numeric(com$alpha)
