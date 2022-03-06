@@ -1,8 +1,5 @@
-#replicates -- should probably edit
-com = read.table("C:/big_summer/1_31/all_inference.csv", h=T, sep = ",")
-com_2 = read.table("C:/big_summer/1_31/second/all_inference.csv", h = T, sep = ",")
-com_2$rep = com_2$rep + 10
-df = rbind(com, com_2)
+#prepare data
+df = read.table("all_inferences.csv", h=T, sep = ",")
 
 #gamma inferences
 df_gamma = df[which(df$dist == "gamma"), ]
