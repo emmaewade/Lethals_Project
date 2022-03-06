@@ -97,11 +97,8 @@ plot <- function(df, h) {
   return(graphs)
 }
 
-#should probably edit
-t_df = read.table("c:/big_summer/1_31/all_log_inference.csv", h=T, sep=",")
-t_df_2 = read.table("c:/big_summer/1_31/second/all_log_inference.csv", h=T, sep=",")
-t_df_2$rep = t_df_2$rep + 10
-t_df = rbind(t_df, t_df_2)
+#prepare data
+t_df = read.table("all_log_inferences.csv", h=T, sep=",")
 
 #h 0 or 0.5
 h = 0.5
