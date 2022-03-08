@@ -9,6 +9,19 @@ Files used in the pipeline are described as follow
 - *XXXXXX.script* script was used to conduct the mutation-selection-drift balance simulations using the software [SLiM 3](https://github.com/MesserLab/SLiM)<sup>1</sup>.
 
 
+- *exp_v_inferred.R* figure 2B, 5B
+- *dot_plot.R* figure 2A, 5A
+- *log_profile.R* figure 6, S5
+- *compare_ss.R* figure 3, S4
+- *compare_sfs.R* ...*to add*
+- *cont_dfe* need?
+- *compare_lethal_sfs.R* ...*to add*
+
+- *all_inferences.csv* ...
+- *all_log_inferences.csv* ...
+- *sfs files* ... *to add*
+
+
 **References**
 - <sup>1</sup> Haller, Benjamin C., and Philipp W. Messer. 2019. “SLiM 3: Forward Genetic Simulations Beyond the Wright–Fisher Model.” *Molecular Biology and Evolution* 36 (3): 632–37.
 - <sup>2</sup> Gutenkunst, Ryan, Ryan Hernandez, Scott Williamson, and Carlos Bustamante. 2010. “Diffusion Approximations for Demographic Inference: DaDi.” *Nature Precedings*, June, 1–1.
