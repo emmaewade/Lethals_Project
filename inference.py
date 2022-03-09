@@ -315,7 +315,7 @@ df_gamma.to_csv('inference/DFE_inference_neugamma_{let_prop}_{h}_{ss}_{replicate
 ###################################################
 
 gammalet_vec = numpy.frompyfunc(neugammalet, 5, 1) 
-# pneu,plet, alpha, beta
+# pneu, plet, alpha, beta
 lower_bound=[0, 1e-3, 1e-3, 1e-2]         
 upper_bound=[0, 1, 1., 50000] 
 params = (0, 0.2, 0.2, 10000.) 
