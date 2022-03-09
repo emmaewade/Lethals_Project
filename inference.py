@@ -31,13 +31,12 @@ let_prop = argv[6]
 # It describes a two epoch model with one historical size change.
 def two_epoch(params, ns, pts):
     nu, T = params
-    #add dadi.Integration.timescale_factor = 0.001
     xx = dadi.Numerics.default_grid(pts)
     
     phi = dadi.PhiManip.phi_1D(xx)
     phi = dadi.Integration.one_pop(phi, xx, T, nu)
     
-    #calculate spectrum
+    # calculate spectrum
     fs = dadi.Spectrum.from_phi(phi, ns, (xx,))
     return fs
 
@@ -51,61 +50,49 @@ def two_epoch_sel(params, ns, pts):
     return fs
 
 # Parameter used:
-# pneu = neutral parameter, proportion of neutral mutations
-# alpha + beta = gamma parameters
-# plet = lethal parameter, describing the proportion of lethal mutations
-
-# < 1e-4 = pneu
-# 1e-4 < gamma < (1e-2????)
-#so, 1e-1 = let
+############################################################################
+# pneu = neutral parameter, proportion of neutral mutations                #
+# alpha + beta = gamma parameteres                                         #
+# plet = lethal parameter, describing the proportion of lethal mutations   #
+#                                                                          #
+# < 1e-4 = pneu                                                            #
+# 1e-4 < gamma < (1e-2????)                                                #
+# so, 1e-1 = let                                                           #
+############################################################################
 
 # A mixture distribution including a point mass in both neutral and lethals + gamma distrib.
 def neugammalet(mgamma, pneu,plet, alpha, beta):
     mgamma = -mgamma
     
-    #neutral
+    # neutral
     if ( 0 <= mgamma ) and ( mgamma < 1e-4 ) :
         return pneu/(1e-4) + (1-pneu-plet)*Selection.gamma_dist(-mgamma, alpha, beta)
     
-    #gamma
+    # gamma
     else:
         return Selection.gamma_dist(-mgamma, alpha, beta) * (1 - pneu-plet)
 
-
-# A mixture distribution including a point mass in both neutral and lethals + exponential distrib.
-def neuexpolet(mexpo, pneu, plet, scale):
-    mexpo = -mexpo
-    
-    #neutral
-    if ( 0 <= mexpo ) and ( mexpo < 1e-4 ) :
-        return pneu/(1e-4) + (1-pneu-plet)*Selection.exponential_dist(-mexpo, scale)
-    
-    #expo
-    else:
-        return Selection.exponential_dist(-mexpo,scale) * (1 - pneu-plet) 
-
-#load synonymous SFS
-#infilename = syn #######MAKE################
+# Loading synonymous SFS
 syn_sfs = numpy.genfromtxt(syn_SFS,delimiter="\n")
 syn_sfs = dadi.Spectrum(syn_sfs)
 
-#initial parameter guesses, convert to coalescent units
+# Initial parameter guesses, converting it to coalescent units
 Nanc = 10000. ###added
 N1 = 1 #means the population size doesn't change???
-T1 = 0.01 #right???
+T1 = 0.01
 
-#setup dadi stuff
-pts_l = [1200, 1600, 2000] #bernard has [600, 800, 1000], kept Isabel's because Nanc was closer
+# Setting up dadi boundaries
+pts_l = [1200, 1600, 2000] 
 func = two_epoch
 func_ex = dadi.Numerics.make_extrap_log_func(func)
-params = [N1, T1] #N2, T2, NC, TC] #changed
-lower_bound = [1e-2, 0.0001]#, 1e-2, 1e-3, 1, 1e-3]
-upper_bound = [10,50.]#, 10, 0.5, 200, 0.5] ###########bounds for T1???##################
-fixed_params = [None, None]#, None, None, None, None] #made none
+params = [N1, T1] 
+lower_bound = [1e-2, 0.0001]
+upper_bound = [10,50.]
+fixed_params = [None, None]
 
-# fit demographic model
-# need to make sure parameters are a good fit
-# i usually run 25-30 runs and make sure they've converged
+# Fitting the demographic model
+# To make sure parameters are a good fit
+# we run 30 iterations until it converges
 
 # randomize starting point
 p0 = dadi.Misc.perturb_params(params, upper_bound=upper_bound)
@@ -169,7 +156,7 @@ gamma_list = numpy.append(gamma_list, -numpy.logspace(numpy.log10(s5-eps),numpy.
 # Parameters for building selection spectra
 ns = syn_sfs.sample_sizes
 
-#**copy Selection.py before running
+# copy Selection.py before running
 # inferring the SFS
 spectra = Selection.spectra(popt, ns, two_epoch_sel, pts_l=pts_l, 
 							gamma_list=gamma_list, echo=True, mp=False, n=Nanc) #, cpus=30)
@@ -180,8 +167,6 @@ spectra = Selection.spectra(popt, ns, two_epoch_sel, pts_l=pts_l,
 spectra.spectra = numpy.array([[0]*sfs_size, *spectra.spectra]) 
 spectra.gammas = numpy.append(-1*2*Nanc, spectra.gammas)
 
-#print spectra, pickle for later?
-#print(spectra)
 
 # Saving spectra using pickle
 #pickle.dump(spectra, open('spectra_h_{coef}.sp'.format(coef=h_coefficient),'wb'))
@@ -215,8 +200,9 @@ print(popt)
 gamma_max_likelihoods.append(popt[0])
 gamma_guesses[popt[0]] = popt                                                            
 
-modelsfs = spectra.integrate(popt[1], dfe, theta_ns)  ###just added
-numpy.savetxt('inference/computed_SFS_gamma_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop=let_prop, ss=sfs_size - 2, replicate=replicate, h=h), modelsfs, delimiter=',') 
+modelsfs = spectra.integrate(popt[1], dfe, theta_ns)
+numpy.savetxt('inference/computed_SFS_gamma_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop=let_prop, 
+                                                ss=sfs_size - 2, replicate=replicate, h=h), modelsfs, delimiter=',') 
 
 results_gamma = []
 print(gamma_guesses.keys())
@@ -234,7 +220,8 @@ df_gamma['pneu'] = 'na'
 df_gamma['scale'] = 'na'
 
 # Saving all the other parameters to a file
-df_gamma.to_csv('inference/DFE_inference_gamma_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, ss = sfs_size - 2, h=h,replicate=replicate), index=False)
+df_gamma.to_csv('inference/DFE_inference_gamma_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, 
+                                                ss = sfs_size - 2, h=h,replicate=replicate), index=False)
 
 
 
@@ -242,7 +229,7 @@ df_gamma.to_csv('inference/DFE_inference_gamma_{let_prop}_{h}_{ss}_{replicate}.c
 # Fitting a neutral + gamma + lethal DFE          #
 ###################################################
 
-neugammalet_vec = numpy.frompyfunc(neugammalet, 5, 1) #----5, 1
+neugammalet_vec = numpy.frompyfunc(neugammalet, 5, 1)
 # parameteres = pneu, alpha, beta, let <- #added parameter for neutrals, lethals
 # pneu,plet, alpha, beta
 lower_bound=[1e-3, 1e-3, 1e-3, 1e-2]         
@@ -261,7 +248,8 @@ gamma_max_likelihoods.append(popt[0])
 gamma_guesses[popt[0]] = popt
 
 modelsfs = spectra.integrate(popt[1], neugammalet_vec, theta_ns)  ###just added
-numpy.savetxt('inference/computed_SFS_neugammalet_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, ss=sfs_size - 2, replicate=replicate, h =h), modelsfs, delimiter=',') 
+numpy.savetxt('inference/computed_SFS_neugammalet_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, 
+                                                ss=sfs_size - 2, replicate=replicate, h =h), modelsfs, delimiter=',') 
 
 results_gamma = []
 print(gamma_guesses.keys())
@@ -276,14 +264,15 @@ df_gamma['nu'] = str(demo[0])
 df_gamma['T'] = str(demo[1])
 df_gamma['scale'] = 'na'
 # Saving all the other parameters to a file
-df_gamma.to_csv('inference/DFE_inference_neugammalet_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, ss = sfs_size - 2, h=h,replicate=replicate), index=False)
+df_gamma.to_csv('inference/DFE_inference_neugammalet_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, 
+                                                ss = sfs_size - 2, h=h,replicate=replicate), index=False)
 
 
 ###################################################
 # Fitting a neutral + gamma  DFE                  #
 ###################################################
 
-neugamma_vec = numpy.frompyfunc(neugammalet, 5, 1) #----5, 1
+neugamma_vec = numpy.frompyfunc(neugammalet, 5, 1) 
 ###parameteres = pneu, alpha, beta, let <- #added parameter for neutrals, lethals
 # pneu,plet, alpha, beta
 lower_bound=[1e-3, 0.0, 1e-3, 1e-2]         
@@ -301,10 +290,9 @@ popt = Selection.optimize_log(p0, nonsyn_sfs, spectra.integrate, neugamma_vec,
 gamma_max_likelihoods.append(popt[0])
 gamma_guesses[popt[0]] = popt
 
-modelsfs = spectra.integrate(popt[1], neugamma_vec, theta_ns)  ###just added
-#numpy.savetxt(model_file, modelsfs,
-      #delimiter = ",")
-numpy.savetxt('inference/computed_SFS_neugamma_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, ss=sfs_size - 2, replicate=replicate, h=h), modelsfs, delimiter=',') 
+modelsfs = spectra.integrate(popt[1], neugamma_vec, theta_ns)
+numpy.savetxt('inference/computed_SFS_neugamma_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, 
+                                                ss=sfs_size - 2, replicate=replicate, h=h), modelsfs, delimiter=',') 
 
 results_gamma = []
 print(gamma_guesses.keys())
@@ -319,14 +307,15 @@ df_gamma['T'] = str(demo[1])
 df_gamma['scale'] = 'na'
 
 # Saving all the other parameters to a file
-df_gamma.to_csv('inference/DFE_inference_neugamma_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, ss = sfs_size - 2, h=h,replicate=replicate), index=False)
+df_gamma.to_csv('inference/DFE_inference_neugamma_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, 
+                                                ss = sfs_size - 2, h=h,replicate=replicate), index=False)
 
 ###################################################
 # Fitting a gamma + lethal  DFE                   #
 ###################################################
 
-gammalet_vec = numpy.frompyfunc(neugammalet, 5, 1) #----5, 1
-# pneu,plet, alpha, beta
+gammalet_vec = numpy.frompyfunc(neugammalet, 5, 1) 
+# pneu, plet, alpha, beta
 lower_bound=[0, 1e-3, 1e-3, 1e-2]         
 upper_bound=[0, 1, 1., 50000] 
 params = (0, 0.2, 0.2, 10000.) 
@@ -342,8 +331,9 @@ popt = Selection.optimize_log(p0, nonsyn_sfs, spectra.integrate, gammalet_vec,
 gamma_max_likelihoods.append(popt[0])
 gamma_guesses[popt[0]] = popt
 
-modelsfs = spectra.integrate(popt[1], gammalet_vec, theta_ns)  ###just added
-numpy.savetxt('inference/computed_SFS_gammalet_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, ss=sfs_size - 2, h=h, replicate=replicate), modelsfs, delimiter=',') 
+modelsfs = spectra.integrate(popt[1], gammalet_vec, theta_ns)  
+numpy.savetxt('inference/computed_SFS_gammalet_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, 
+                                                ss=sfs_size - 2, h=h, replicate=replicate), modelsfs, delimiter=',') 
 
 results_gamma = []
 print(gamma_guesses.keys())
@@ -357,44 +347,5 @@ df_gamma['nu'] = str(demo[0])
 df_gamma['T'] = str(demo[1])
 df_gamma['scale'] = 'na'
 # Saving all the other parameters to a file
-df_gamma.to_csv('inference/DFE_inference_gammalet_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, ss = sfs_size - 2, h=h, replicate=replicate), index=False)
-
-###################################################
-# Fitting a expo + lethal + gamma  DFE            #
-###################################################
-
-neuexpolet_vec = numpy.frompyfunc(neuexpolet, 4, 1) #----5, 1
-###pneu, plet, scale
-lower_bound=[1e-3, 1e-3, 1e-3]         
-upper_bound=[1,  1, 1] 
-params = (.2, .2, .2) 
-gamma_max_likelihoods = []
-gamma_guesses = dict()
-
-p0 = dadi.Misc.perturb_params(params, upper_bound=upper_bound)
-popt = Selection.optimize_log(p0, nonsyn_sfs, spectra.integrate, neuexpolet_vec,
-								 theta_ns, lower_bound=lower_bound, 
-								 upper_bound=upper_bound, verbose=len(p0),
-								 maxiter=25)
-
-gamma_max_likelihoods.append(popt[0])
-gamma_guesses[popt[0]] = popt
-
-modelsfs = spectra.integrate(popt[1], neuexpolet_vec, theta_ns)  ###just added
-# Saving all the parameters to a file
-numpy.savetxt('inference/computed_SFS_neuexpolet_{let_prop}_{h}_{ss}_{replicate}.txt'.format(let_prop = let_prop, ss=sfs_size - 2, h=h, replicate=replicate), modelsfs, delimiter=',') 
-
-results_gamma = []
-print(gamma_guesses.keys())
-for i in range(len(gamma_guesses.keys())):
-    best_popt_gamma = gamma_guesses[gamma_max_likelihoods[i]]
-    results_gamma.append([best_popt_gamma[0], best_popt_gamma[1][0], best_popt_gamma[1][1], best_popt_gamma[1][2]])
-
-df_gamma = pd.DataFrame(results_gamma, columns =['Likelihood', 'pneu','plet', 'scale'], dtype = float) #, 'alpha', 'beta'
-df_gamma['Nanc'] = str(Nanc)
-df_gamma['nu'] = str(demo[0])
-df_gamma['T'] = str(demo[1])
-df_gamma['alpha'] = 'na'
-df_gamma['beta'] = 'na'
-# Saving all the other parameters to a file
-df_gamma.to_csv('inference/DFE_inference_neuexpolet_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, ss = sfs_size - 2, h=h, replicate=replicate), index=False)
+df_gamma.to_csv('inference/DFE_inference_gammalet_{let_prop}_{h}_{ss}_{replicate}.csv'.format(let_prop = let_prop, 
+                                                    ss = sfs_size - 2, h=h, replicate=replicate), index=False)
