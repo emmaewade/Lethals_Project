@@ -13,16 +13,16 @@ Scripts for each figure are:
 - *figures/script/dot_plot.R* figure 2A, 5A
 - *figures/script/log_profile.R* figure 6, S5
 - *figures/script/compare_ss.R* figure 3, S4
-- *figures/script/compare_sfs.R* ...*to add*
-- *figures/script/cont_dfe* need?
-- *figures/script/compare_lethal_sfs.R* ...*to add*
+- *figures/script/compare_sfs.R* figure 1, 4, S3
+- *figures/script/compare_inf_sim_sfs.R* ...to add
 
 Data produced to generate figure are:
-- *figures/data/all_inferences.csv* ...
-- *figures/data/all_log_inferences.csv* ...
-- *figures/data/sim_avg_sfs10.csv* ...
-- *figures/data/sim_avg_sfs100.csv* ... 
-- *figures/data/sim_avg_sfs1000.csv* ...
+- *figures/data/all_inferences.csv* 
+- *figures/data/all_log_inferences.csv* 
+- *figures/data/exp_v_inferred.csv* 
+- *figures/data/sim_avg_sfs10.csv* 
+- *figures/data/sim_avg_sfs100.csv*  
+- *figures/data/sim_avg_sfs1000.csv* 
 - *to add fitdadi sfss*
 
 
