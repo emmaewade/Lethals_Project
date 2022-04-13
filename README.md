@@ -26,6 +26,7 @@ Data produced to generate figure are:
 - *figures/data/computed_avg_sfs100.csv*  
 - *figures/data/computed_avg_sfs1000.csv* 
 
+Scripts for mutation-selection-drift balance results are available at: https://github.com/ckyriazis/lethals_scripts
 
 **References**
 - <sup>1</sup> Haller, Benjamin C., and Philipp W. Messer. 2019. “SLiM 3: Forward Genetic Simulations Beyond the Wright–Fisher Model.” *Molecular Biology and Evolution* 36 (3): 632–37.
