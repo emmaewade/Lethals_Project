@@ -6,12 +6,11 @@ Files used in the pipeline are described as follow
 - *sim.slim* Forward in time simulations were conducted using the software [SLiM 3](https://github.com/MesserLab/SLiM)<sup>1</sup>.
 - *demographic_inference.py* This python script contains the code used for the inference demographic parameters using the software [dadi](https://dadi.readthedocs.io/en/latest/#welcome-to-dadi)<sup>2</sup>.
 - *selection_inference.py* This python script contains the code used for the inference of the distribution of fitness effects (DFE) using the software [fitdadi](https://github.com/LohmuellerLab/fitdadi)<sup>3</sup>.
-- *XXXXXX.script* script was used to conduct the mutation-selection-drift balance simulations using the software [SLiM 3](https://github.com/MesserLab/SLiM)<sup>1</sup>.
 
 Scripts for each figure are:
-- *figures/script/exp_v_inferred.R* figure 2B, 5B
-- *figures/script/dot_plot.R* figure 2A, 5A
-- *figures/script/log_profile.R* figure 6, S5
+- *figures/script/exp_v_inferred.R* figure 2B, 5B 
+- *figures/script/dot_plot.R* figure 2A, 5A 
+- *figures/script/log_profile.R* figure 6, S5 - 
 - *figures/script/compare_ss.R* figure 3, S4
 - *figures/script/compare_sfs.R* figure 1, 4, S3
 - *figures/script/compare_inf_sim_sfs.R* ...to add
@@ -23,7 +22,9 @@ Data produced to generate figure are:
 - *figures/data/sim_avg_sfs10.csv* 
 - *figures/data/sim_avg_sfs100.csv*  
 - *figures/data/sim_avg_sfs1000.csv* 
-- *to add fitdadi sfss*
+- *figures/data/computed_avg_sfs10.csv* 
+- *figures/data/computed_avg_sfs100.csv*  
+- *figures/data/computed_avg_sfs1000.csv* 
 
 
 **References**
