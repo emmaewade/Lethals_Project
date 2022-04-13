@@ -15,7 +15,7 @@ Scripts for each figure are:
 - *figures/script/compare_sfs.R* : Figure 1, 4, S3
 - *figures/script/compare_inf_sim_sfs.R* : Figure S2
 
-Data produced to generate figure are:
+Data produced to generate figures are:
 - *figures/data/all_inferences.csv* 
 - *figures/data/all_log_inferences.csv* 
 - *figures/data/exp_v_inferred.csv* 
