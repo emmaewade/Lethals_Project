@@ -8,12 +8,12 @@ Files used in the pipeline are described as follow
 - *selection_inference.py* This python script contains the code used for the inference of the distribution of fitness effects (DFE) using the software [fitdadi](https://github.com/LohmuellerLab/fitdadi)<sup>3</sup>.
 
 Scripts for each figure are:
-- *figures/script/exp_v_inferred.R* figure 2B, 5B 
-- *figures/script/dot_plot.R* figure 2A, 5A 
-- *figures/script/log_profile.R* figure 6, S5 - 
-- *figures/script/compare_ss.R* figure 3, S4
-- *figures/script/compare_sfs.R* figure 1, 4, S3
-- *figures/script/compare_inf_sim_sfs.R* ...to add
+- *figures/script/exp_v_inferred.R* : Figure 2B, 5B 
+- *figures/script/dot_plot.R* : Figure 2A, 5A 
+- *figures/script/log_profile.R* : Figure 6, S5 
+- *figures/script/compare_ss.R* : Figure 3, S4
+- *figures/script/compare_sfs.R* : Figure 1, 4, S3
+- *figures/script/compare_inf_sim_sfs.R* : Figure S2
 
 Data produced to generate figure are:
 - *figures/data/all_inferences.csv* 
