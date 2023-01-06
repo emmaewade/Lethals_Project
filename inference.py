@@ -56,8 +56,8 @@ def two_epoch_sel(params, ns, pts):
 # plet = lethal parameter, describing the proportion of lethal mutations   #
 #                                                                          #
 # < 1e-4 = pneu                                                            #
-# 1e-4 < gamma < (1e-2????)                                                #
-# so, 1e-1 = let                                                           #
+# 1e-4 < gamma < 1e-2                                                #
+# so, > 1e-2 = let                                                           #
 ############################################################################
 
 # A mixture distribution including a point mass in both neutral and lethals + gamma distrib.
