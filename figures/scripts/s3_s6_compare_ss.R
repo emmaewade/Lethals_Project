@@ -211,7 +211,7 @@ for (h in h_co){
                                                                                         "Slightly Del.", "Moderately Del.", "Strongly Del.")) , y = mean))+
     theme_bw()+
     geom_bar(position = "dodge", stat = "identity")+
-    facet_wrap(~factor(level), nrow = 4)+
+    facet_wrap(~factor(level,levels = c("0% Lethal", "1% Lethal", "5% Lethal", "10% Lethal") ), nrow = 4)+
     labs( x = "s", y = "Mean Probability Mass", fill = "Sample Size")+
     geom_errorbar(aes(ymin= mean  - sd, ymax= mean + sd), position=position_dodge(.9))+
     theme(plot.title = element_text(hjust = 0.5), text = element_text(size = 15), plot.tag = element_text(), 

@@ -132,6 +132,8 @@ for (h in h_co)  {
 
 ########################################
 #### Figure S3  1% Number of Lethal
+###need to fix#####
+df$Sites[which(df$Sites == num_sites + 1)] = "+"
 lethal_1 = df[which(df$prop == "1% Lethal" & df$Type == "Lethal"), ]
 
 #facet = simulated level

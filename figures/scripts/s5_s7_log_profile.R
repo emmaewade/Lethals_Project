@@ -103,7 +103,7 @@ plot <- function(df, h) {
 }
 
 #prepare data
-t_df = read.table("Lethals_Project-main/Lethals_Project-main/figures/data/all_log_inference.csv", h=T, sep=",")
+t_df = read.table("Lethals_Project-main/Lethals_Project-main/figures/data/all_log_20_inference.csv", h=T, sep=",")
 
 #h 0 or 0.5
 h_co = c(0, 0.5)
@@ -114,7 +114,7 @@ for (h in h_co) {
   require("ggpubr")
   ggc <- ggarrange(gg[["0"]], gg[["0.01"]], gg[["0.05"]], gg[["0.1"]], common.legend = FALSE, ncol=2, nrow=2)
   
-  pdf(paste("figures/h_", h, "_log_profile.pdf", sep = ""), width = 15, height = 8)
+  pdf(paste("figures/h_", h, "_log_profile.pdf", sep = ""), width = 15, height = 10)
   print(ggc)
   dev.off()
 }
