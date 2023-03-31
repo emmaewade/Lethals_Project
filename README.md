@@ -11,7 +11,7 @@ Scripts for each figure are available in *figures/scripts*
 
 Data produced to generate figures are:
 - *figures/data/all_inferences.csv* 
-- *figures/data/all_log_inferences.csv* 
+- *figures/data/all_log_20_inferences.csv* 
 - *figures/data/exp_v_inferred.csv* 
 - *figures/data/sim_avg_sfs10.csv* 
 - *figures/data/sim_avg_sfs100.csv*  
