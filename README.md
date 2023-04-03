@@ -1,7 +1,7 @@
 Introduction to Lethals Project
 ============
 
-This document was created as a repository of the scripts used in the analyses of the article: Wade, Kyriazis, Cavassim, Lohmueller.*Quantifying the fraction of new mutations that are recessive lethal*. *Evolution*, 2023.(doi: XXXXX).
+This document was created as a repository of the scripts used in the analyses of the article: Wade, Kyriazis, Cavassim, Lohmueller. Quantifying the fraction of new mutations that are recessive lethal. *Evolution*, 2023.(doi: XXXXX).
 Files used in the pipeline are described as follow
 - *sim.slim* Forward in time simulations were conducted using the software [SLiM 3](https://github.com/MesserLab/SLiM)<sup>1</sup>.
 - *demographic_inference.py* This python script contains the code used for the inference demographic parameters using the software [dadi](https://dadi.readthedocs.io/en/latest/#welcome-to-dadi)<sup>2</sup>.
