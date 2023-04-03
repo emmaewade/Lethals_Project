@@ -1,13 +1,14 @@
 Introduction to Lethals Project
 ============
 
-This document was created as a repository of the scripts used in the analyses of the article: Wade, Kyriazis, Cavassim, Lohmueller. Quantifying the fraction of new mutations that are recessive lethal. *Evolution*, 2023.(doi: XXXXX).
+This document was created as a repository of the scripts used in the analyses of the article: Wade, Kyriazis, Cavassim, Lohmueller. 2023. "Quantifying the fraction of new mutations that are recessive lethal." *Evolution*. (doi: XXXXX).
+
 Files used in the pipeline are described as follow
 - *sim.slim* Forward in time simulations were conducted using the software [SLiM 3](https://github.com/MesserLab/SLiM)<sup>1</sup>.
 - *demographic_inference.py* This python script contains the code used for the inference demographic parameters using the software [dadi](https://dadi.readthedocs.io/en/latest/#welcome-to-dadi)<sup>2</sup>.
 - *selection_inference.py* This python script contains the code used for the inference of the distribution of fitness effects (DFE) using the software [fitdadi](https://github.com/LohmuellerLab/fitdadi)<sup>3</sup>.
 
-Script for Table 1;s complex model analysis: 
+Script for Table 1's complex model analysis: 
 - *parse_inference_results_Table1.R*
 
 Table 1 Output: 
